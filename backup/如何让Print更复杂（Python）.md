@@ -26,7 +26,7 @@ print_message_with_conditions(word)
 
 How do you make Print more complex? Let's practice!
 ---
-``python
+```python
 print(“Hello World”)
 ```
 Here's the initial code, it's not complicated at all.
@@ -36,6 +36,7 @@ word = “Hello World”
 print(word)
 ```
 Utilizes variables, but is still very simple.
+
 ** **
 ```python
 def print_message_with_conditions(message, length_threshold=10):  
