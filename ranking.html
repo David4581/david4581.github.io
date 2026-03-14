@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>积分排行榜 | Nova Universe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IBM+Plex+Sans+Condensed:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise"></div>
+    <div class="nebula"></div>
+
+    <div class="hero page-hero" style="padding-bottom: 20px;">
+      <nav class="nav fade-up">
+        <div class="brand">
+          <div class="brand-text">
+            <span class="brand-title">Nova Universe</span>
+            <span class="brand-sub">Nova SMP</span>
+          </div>
+        </div>
+        <div class="nav-links">
+          <a href="index.html#about">世界观</a>
+          <a href="index.html#features">玩法</a>
+          <a href="characters.html">角色</a>
+          <a href="ranking.html" class="active">排行榜</a>
+          <a href="index.html#gallery">画面</a>
+          <a href="index.html#entry">加入</a>
+        </div>
+      </nav>
+    </div>
+
+    <!-- RANKING SECTION -->
+    <section class="section" style="padding-top: 40px; min-height: 80vh;">
+      <div class="section-inner">
+        <div class="section-title fade-up">
+          <p class="tag" style="margin-bottom: 12px; display: inline-block;">CNTier 积分系统</p>
+          <h1 style="font-family: 'Cinzel', serif; font-size: clamp(40px, 6vw, 60px); text-transform: uppercase; color: #fff; margin-bottom: 20px; background: linear-gradient(to right, #fff, var(--ice)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Leaderboard</h1>
+          <p style="color: var(--mist); font-size: 14px; max-width: 600px;">点击玩家以查看详细名片与评分细节。总积分由各单项评级自动计算生成 (A=5, B=3, C=2, D=1, 带+号额外+1分)。特殊项需要由管理员审核。</p>
+          
+          <div style="margin-top: 25px; padding: 15px 20px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); display: inline-flex; flex-wrap: wrap; gap: 20px; justify-content: center; font-size: 13px; color: #aeb9db; text-align: left;">
+            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/pvp.png" alt="PVP" style="height: 32px; width: auto; display: inline; vertical-align: middle;"> 战斗水平</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/AC.png" alt="AC" style="height: 32px; width: auto; display: inline; vertical-align: middle;"> 在线积极度</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/arg.png" alt="PH" style="height: 32px; width: auto; display: inline; vertical-align: middle;"> 拍摄水平</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/redstone.png" alt="SU" style="height: 32px; width: auto; display: inline; vertical-align: middle;"> 生存与建设</div>
+          </div>
+        </div>
+
+        <div class="ranking-container fade-up">
+          <div class="rank-list" id="leaderboard-body">
+            <!-- JS自动渲染 -->
+          </div>
+        </div>
+
+        <div class="fade-up" style="text-align: center; margin-top: 80px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.05);">
+          <a href="index.html" class="cta ghost" style="text-decoration: none;">← 返回主世界 (Home)</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer fade-up">
+      <div class="footer-inner">
+        <span>Nova Universe</span>
+        <span>© 2026 Nova SMP</span>
+      </div>
+    </footer>
+
+    <!-- MODAL CARD 重新设计 -->
+    <div class="modal-overlay" id="player-modal" onclick="if(event.target===this) document.getElementById('player-modal').classList.remove('active')">
+      <div class="modal-content">
+        <button class="modal-close" id="close-modal">&times;</button>
+        <div class="modal-top">
+          <div class="modal-big-avatar" id="modal-avatar">K</div>
+          <div class="modal-info">
+            <h3 id="modal-name">Player Name</h3>
+            <p id="modal-score" style="color: var(--flare); font-size: 14px; font-weight: bold; letter-spacing: 1px; margin-bottom: 12px; text-transform: uppercase;">RANK #1 / SCORE 0 Pts</p>
+            <p id="modal-desc" style="font-style: italic; color: #aeb9db; line-height: 1.5;"></p>
+          </div>
+        </div>
+        
+        <div class="modal-bottom-badges" id="modal-badges">
+          <!-- JS 动态生成 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- JS 计算与渲染逻辑 -->
+    <script>
+      // ============================================
+      // ⬇️ 只需要在这个数组里修改或添加玩家数据即可 ⬇️
+      // ============================================
+      const playersData = [
+        {
+          name: "bendyus",
+          avatar: "B",
+          avatarImg: "images/avatars/bendyus.jpg",
+          avatarBg: "linear-gradient(135deg, var(--cinder), #4a5a7c)",
+          pvp: "A",
+          ac: "A+",
+          ph: "B+",
+          su: "B",
+          desc: "排行榜顶端的先驱者。"
+        },
+        {
+          name: "Red_IxX",
+          avatar: "R",
+          avatarImg: "images/avatars/red.jpg",
+          avatarBg: "linear-gradient(135deg, var(--cinder), #a63c3c)",
+          pvp: "A+",
+          ac: "A",
+          ph: "B+",
+          su: "C",
+          desc: "冷酷极端的顶尖玩家，深暗猎杀者。"
+        },
+        {
+          name: "Zaixiankaka",
+          avatar: "Z",
+          avatarImg: "images/avatars/kaka.jpg",
+          avatarBg: "linear-gradient(135deg, var(--cinder), var(--ember-soft))",
+          pvp: "C",
+          ac: "A",
+          ph: "A+",
+          su: "B",
+          desc: "创始发起人。所有的行动都为了向外界证明我们不只是NPC。"
+        },
+        {
+          name: "aodis.",
+          avatar: "A",
+          avatarBg: "linear-gradient(135deg, var(--cinder), #7a5a9c)",
+          pvp: "A",
+          ac: "B",
+          ph: "-",
+          su: "A",
+          desc: ""
+        },
+        {
+          name: "smarrry",
+          avatar: "S",
+          avatarBg: "linear-gradient(135deg, var(--cinder), #3c8a7c)",
+          pvp: "A",
+          ac: "B+",
+          ph: "-",
+          su: "B",
+          desc: ""
+        },
+        {
+          name: "twilight_consine",
+          avatar: "T",
+          avatarBg: "linear-gradient(135deg, var(--cinder), #9c5c3a)",
+          pvp: "A",
+          ac: "A",
+          ph: "C",
+          su: "-",
+          desc: ""
+        },
+        {
+          name: "JUSI_ONLINE",
+          avatar: "J",
+          avatarBg: "linear-gradient(135deg, var(--cinder), #4a7c59)",
+          pvp: "C+",
+          ac: "A",
+          ph: "D",
+          su: "D",
+          desc: "忠诚的同行者，即使危险也绝不抛弃同伴。"
+        },
+        {
+          name: "YemsoL_good game",
+          avatar: "Y",
+          avatarBg: "linear-gradient(135deg, var(--cinder), #8c8a1c)",
+          pvp: "A",
+          ac: "B",
+          ph: "B",
+          su: "-",
+          desc: ""
+        },
+        {
+          name: "king_kaka",
+          avatar: "K",
+          avatarBg: "linear-gradient(135deg, var(--cinder), #2c5c8c)",
+          pvp: "A",
+          ac: "B",
+          ph: "-",
+          su: "-",
+          desc: ""
+        },
+        {
+          name: "Bot41",
+          avatar: "B",
+          avatarBg: "linear-gradient(135deg, var(--cinder), #5a5a5a)",
+          pvp: "A",
+          ac: "D",
+          ph: "-",
+          su: "-",
+          desc: "自动化执行单元。"
+        },
+        {
+          name: "PixelMinuteMC",
+          avatar: "P",
+          avatarBg: "linear-gradient(135deg, var(--cinder), #8c3a5c)",
+          pvp: "A",
+          ac: "D",
+          ph: "-",
+          su: "-",
+          desc: ""
+        },
+        {
+          name: "XYZ",
+          avatar: "X",
+          avatarBg: "linear-gradient(135deg, var(--cinder), #6c8a5c)",
+          pvp: "-",
+          ac: "D",
+          ph: "C",
+          su: "-",
+          desc: ""
+        }
+      ];
+      // ============================================
+
+      const gradePoints = { "A": 5, "B": 3, "C": 2, "D": 1 };
+
+      function calculateScore(player) {
+        let total = 0;
+        ['pvp', 'ac', 'ph', 'su'].forEach(key => {
+          const rank = player[key];
+          if (!rank || rank === '-') return;
+          const letter = rank.replace('+', '').toUpperCase();
+          let score = gradePoints[letter] || 0;
+          if (rank.includes('+')) score += 1;
+          total += score;
+        });
+        return total;
+      }
+
+      function getCrown(rank) {
+        if(rank === 1) return '<img src="https://em-content.zobj.net/source/apple/354/crown_1f451.png" alt="1st" class="rank-crown">';
+        if(rank === 2) return '<img src="https://em-content.zobj.net/source/apple/354/sports-medal_1f3c5.png" alt="2nd" class="rank-crown" style="filter: grayscale(100%) brightness(1.5);">';
+        if(rank === 3) return '<img src="https://em-content.zobj.net/source/apple/354/sports-medal_1f3c5.png" alt="3rd" class="rank-crown" style="filter: sepia(1) hue-rotate(-50deg) saturate(2) brightness(0.9);">';
+        return '';
+      }
+
+      // 计算每个人的分并排序
+      playersData.forEach(p => p.totalScore = calculateScore(p));
+      playersData.sort((a, b) => b.totalScore - a.totalScore); // 从高到低排序
+
+      const tbody = document.getElementById('leaderboard-body');
+      const modal = document.getElementById('player-modal');
+      const closeModalBtn = document.getElementById('close-modal');
+
+      function renderTable() {
+        tbody.innerHTML = '';
+        playersData.forEach((p, index) => {
+          const rankNum = index + 1;
+          const styleAttr = p.color ? `color: ${p.color};` : '';
+          const borderAttr = p.color ? `border-color: ${p.color};` : '';
+          
+          const card = document.createElement('div');
+          card.className = 'rank-card';
+          card.onclick = () => openModal(p, rankNum);
+
+          card.innerHTML = `
+            <div class="rank-num-container">
+              ${getCrown(rankNum)}
+              <div class="rank-num">#${rankNum}</div>
+            </div>
+            
+            <div class="rank-avatar" style="background: ${p.avatarBg || ''}; ${p.avatarImg ? `background-image: url('${p.avatarImg}'); background-size: cover; background-position: center; color: transparent; border: none;` : ''} ${styleAttr} ${borderAttr}">${p.avatarImg ? '' : p.avatar}</div>
+            <div class="rank-name" style="${styleAttr}">${p.name}</div>
+            
+              <div class="rank-badges">
+                <div class="badge-col">
+                  <div class="badge-circle"><span class="badge-val" data-grade="${p.pvp || '-'}">${p.pvp || '-'}</span></div>
+                  <div style="font-size: 11px; color: #aeb9db; margin-top: 4px;">PVP</div>
+                </div>
+                <div class="badge-col">
+                  <div class="badge-circle"><span class="badge-val" data-grade="${p.ac || '-'}">${p.ac || '-'}</span></div>
+                  <div style="font-size: 11px; color: #aeb9db; margin-top: 4px;">AC</div>
+                </div>
+                <div class="badge-col">
+                  <div class="badge-circle"><span class="badge-val" data-grade="${p.ph || '-'}">${p.ph || '-'}</span></div>
+                  <div style="font-size: 11px; color: #aeb9db; margin-top: 4px;">PH</div>
+                </div>
+                <div class="badge-col">
+                  <div class="badge-circle"><span class="badge-val" data-grade="${p.su || '-'}">${p.su || '-'}</span></div>
+                  <div style="font-size: 11px; color: #aeb9db; margin-top: 4px;">SU</div>
+                </div>
+                <div class="badge-col" style="margin-left: 20px;">
+                  <div class="total-score" style="font-size: 26px;">${p.totalScore}</div>
+                  <div style="font-size: 11px; color: var(--flare); margin-top: 4px; font-weight: bold;">PTS</div>
+                </div>
+              </div>
+          `;
+          
+          tbody.appendChild(card);
+        });
+      }
+
+      function openModal(p, rankNum) {
+        const modalAvatar = document.getElementById('modal-avatar');
+        if (p.avatarImg) {
+            modalAvatar.innerText = '';
+            modalAvatar.style.background = `url('${p.avatarImg}') center/cover no-repeat`;
+            modalAvatar.style.borderColor = p.color ? p.color : 'rgba(255, 255, 255, 0.1)';
+        } else {
+            modalAvatar.innerText = p.avatar;
+            modalAvatar.style.background = p.avatarBg || 'linear-gradient(135deg, var(--cinder), var(--ember-soft))';
+            modalAvatar.style.color = p.color || '#fff';
+            modalAvatar.style.borderColor = p.color ? p.color : 'rgba(255, 255, 255, 0.1)';
+        }
+        
+        document.getElementById('modal-name').innerText = p.name;
+        document.getElementById('modal-name').style.color = p.color || '#fff';
+        document.getElementById('modal-score').innerText = `RANK #${rankNum} / TOTAL: ${p.totalScore} Pts`;
+        
+        const badgesContainer = document.getElementById('modal-badges');
+        badgesContainer.innerHTML = '';
+        const cats = [
+          {k:'pvp', l:'PVP'},
+          {k:'ac', l:'AC'},
+          {k:'ph', l:'PH'},
+          {k:'su', l:'SU'}
+        ];
+        cats.forEach(c => {
+          badgesContainer.innerHTML += `
+            <div class="modal-badge-container">
+              <div class="badge-circle"><span class="badge-val" data-grade="${p[c.k] || '-'}">${p[c.k] || '-'}</span></div>
+              <span style="font-size: 12px; color: #aeb9db; font-weight: bold;">${c.l}</span>
+            </div>
+          `;
+        });
+        
+        document.getElementById('modal-desc').innerText = p.desc || '在这个深暗的宇宙中，Ta还没有留下太多传闻...';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      closeModalBtn.addEventListener('click', () => {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+      });
+
+      // 初始化渲染
+      renderTable();
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
