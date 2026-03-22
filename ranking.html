@@ -4,12 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>积分排行榜 | Nova Universe</title>
+    <meta name="description" content="Nova Universe 排行榜：根据战斗、在线、拍摄与生存建设等维度的综合积分排名。"/>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IBM+Plex+Sans+Condensed:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap"
       rel="stylesheet"
     />
+    <meta name="theme-color" content="#0a101f" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -39,15 +41,15 @@
     <section class="section" style="padding-top: 40px; min-height: 80vh;">
       <div class="section-inner">
         <div class="section-title fade-up">
-          <p class="tag" style="margin-bottom: 12px; display: inline-block;">CNTier 积分系统</p>
+          <!-- <p class="tag" style="margin-bottom: 12px; display: inline-block;">CNTier 积分系统</p> -->
           <h1 style="font-family: 'Cinzel', serif; font-size: clamp(40px, 6vw, 60px); text-transform: uppercase; color: #fff; margin-bottom: 20px; background: linear-gradient(to right, #fff, var(--ice)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Leaderboard</h1>
           <p style="color: var(--mist); font-size: 14px; max-width: 600px;">点击玩家以查看详细名片与评分细节。总积分由各单项评级自动计算生成 (A=5, B=3, C=2, D=1, 带+号额外+1分)。特殊项需要由管理员审核。</p>
           
           <div style="margin-top: 25px; padding: 15px 20px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); display: inline-flex; flex-wrap: wrap; gap: 20px; justify-content: center; font-size: 13px; color: #aeb9db; text-align: left;">
-            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/pvp.png" alt="PVP" style="height: 32px; width: auto; display: inline; vertical-align: middle;"> 战斗水平</div>
-            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/AC.png" alt="AC" style="height: 32px; width: auto; display: inline; vertical-align: middle;"> 在线积极度</div>
-            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/arg.png" alt="PH" style="height: 32px; width: auto; display: inline; vertical-align: middle;"> 拍摄水平</div>
-            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/redstone.png" alt="SU" style="height: 32px; width: auto; display: inline; vertical-align: middle;"> 生存与建设</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/pvp.png" alt="PVP" style="height: 32px; width: auto; display: inline; vertical-align: middle;" loading="lazy" decoding="async"> 战斗水平</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/AC.png" alt="AC" style="height: 32px; width: auto; display: inline; vertical-align: middle;" loading="lazy" decoding="async"> 在线积极度</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/arg.png" alt="PH" style="height: 32px; width: auto; display: inline; vertical-align: middle;" loading="lazy" decoding="async"> 拍摄水平</div>
+            <div style="display: flex; align-items: center; gap: 8px;"><img src="images/icon/redstone.png" alt="SU" style="height: 32px; width: auto; display: inline; vertical-align: middle;" loading="lazy" decoding="async"> 生存与建设</div>
           </div>
         </div>
 
@@ -152,12 +154,13 @@
         {
           name: "twilight_consine",
           avatar: "T",
+          avatarImg: "images/avatars/twilight_consine.png",
           avatarBg: "linear-gradient(135deg, var(--cinder), #9c5c3a)",
           pvp: "A",
           ac: "A",
           ph: "C",
           su: "-",
-          desc: ""
+          desc: "只会打平地的菜鸟，幻想着成为战斗大师"
         },
         {
           name: "JUSI_ONLINE",

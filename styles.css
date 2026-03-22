@@ -1,5 +1,5 @@
 :root {
-  color-scheme: only light;
+  color-scheme: light;
   --ink: #05070b;
   --coal: #0b0e14;
   --cinder: #121826;
@@ -67,6 +67,14 @@ a {
   100% { transform: scale(1.05); opacity: 1; }
 }
 
+/* 当用户偏好减少动效时，尽量禁用过渡与动画，提升可访问性与性能 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
 .hero {
   position: relative;
   padding: 36px 7vw 160px;

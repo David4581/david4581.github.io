@@ -25,6 +25,7 @@ const observer = new IntersectionObserver(
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
       }
     });
   },
@@ -62,8 +63,10 @@ if (joinBtn && toast) {
     navigator.clipboard.writeText("1091651988").then(() => {
       clearTimeout(toastTimeout);
       toast.classList.add("show");
+      toast.setAttribute("aria-hidden", "false");
       toastTimeout = setTimeout(() => {
         toast.classList.remove("show");
+        toast.setAttribute("aria-hidden", "true");
       }, 3000);
     });
   });
